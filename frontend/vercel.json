@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://nexa-store-czvr.onrender.com/api/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
