@@ -1,0 +1,66 @@
+/* =========================
+   Product grid
+========================= */
+
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+}
+
+
+/* =========================
+   Product cards
+========================= */
+
+.product-card {
+    flex: 1;
+    min-width: 280px;
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   Product content
+========================= */
+
+.product-content {
+    padding-top: 18px;
+}
+
+
+/* =========================
+   Product category
+========================= */
+
+.product-category {
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+
+/* =========================
+   Product title
+========================= */
+
+.product-card h3 {
+    margin: 0 0 10px;
+    font-size: 22px;
+}
+
+
+/* =========================
+   Product description
+========================= */
+
+.product-description {
+    margin: 0 0 18px;
+    color: #64748b;
+    line-height: 1.6;
+}
