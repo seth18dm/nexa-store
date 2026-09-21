@@ -1,3 +1,5 @@
+import airsoundPro from "../assets/Products/airsound-pro.png";
+
 function Hero() {
     return (
         <section className="hero">
@@ -78,7 +80,10 @@ function Hero() {
                         </div>
 
                         <div className="hero-product-image">
-                            <span>HEADPHONES</span>
+                            <img
+                                src={airsoundPro}
+                                alt="NEXA AirSound Pro headphones"
+                            />
                         </div>
 
                         <div className="hero-product-info">
