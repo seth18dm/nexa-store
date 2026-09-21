@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://nexa-store-czvr.onrender.com/api/:path*"
+    }
+  ]
+}
