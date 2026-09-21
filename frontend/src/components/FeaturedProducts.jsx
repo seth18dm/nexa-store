@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 
 import ProductCard from "./ProductCard";
 
-import airsoundPro from "../assets/products/airsound-pro.png";
-import mechakey75 from "../assets/products/mechakey-75.png";
-import pulseX1 from "../assets/products/pulse-x1.png";
+import airsoundPro from "../assets/Products/airsound-pro.png";
+import mechakey75 from "../assets/Products/mechakey-75.png";
+import pulseX1 from "../assets/Products/pulse-x1.png";
 
 
 function FeaturedProducts({ onAddToCart }) {
