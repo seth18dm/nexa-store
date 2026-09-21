@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -16,6 +16,10 @@ import Cart from "./pages/Cart";
 const API_URL =
     import.meta.env.VITE_API_URL ||
     "http://localhost:5000/api/products";
+
+// =========================
+// HOME
+// =========================
 
 function Home({ cartCount, onAddToCart }) {
     return (
@@ -35,15 +39,203 @@ function Home({ cartCount, onAddToCart }) {
     );
 }
 
+// =========================
+// LOGIN / REGISTER
+// =========================
+
 function Login({ cartCount }) {
+    const navigate = useNavigate();
+
+    const [isRegistering, setIsRegistering] = useState(false);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        setMessage("");
+        setLoading(true);
+
+        const authUrl = API_URL.replace("/products", "/auth");
+
+        const endpoint = isRegistering
+            ? `${authUrl}/register`
+            : `${authUrl}/login`;
+
+        const body = isRegistering
+            ? {
+                name,
+                email,
+                password
+            }
+            : {
+                email,
+                password
+            };
+
+        try {
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Authentication failed"
+                );
+            }
+
+            localStorage.setItem(
+                "nexaUser",
+                JSON.stringify(data.user)
+            );
+
+            setMessage(
+                isRegistering
+                    ? "Registration successful!"
+                    : "Login successful!"
+            );
+
+            setTimeout(() => {
+                navigate("/");
+            }, 800);
+        } catch (error) {
+            setMessage(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <>
             <Navbar cartCount={cartCount} />
 
             <main className="section">
                 <div className="container">
-                    <h1>Login</h1>
-                    <p>Login page coming next.</p>
+                    <div className="admin-form-card">
+
+                        <p className="eyebrow">
+                            NEXA ACCOUNT
+                        </p>
+
+                        <h1>
+                            {isRegistering
+                                ? "Create Account"
+                                : "Welcome Back"}
+                        </h1>
+
+                        <p>
+                            {isRegistering
+                                ? "Create your NEXA STORE account."
+                                : "Login to your NEXA STORE account."}
+                        </p>
+
+                        <form
+                            className="admin-form"
+                            onSubmit={handleSubmit}
+                        >
+                            {isRegistering && (
+                                <div className="admin-form-group full-width">
+                                    <label>Full Name</label>
+
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={(event) =>
+                                            setName(event.target.value)
+                                        }
+                                        placeholder="Enter your name"
+                                        required
+                                    />
+                                </div>
+                            )}
+
+                            <div className="admin-form-group full-width">
+                                <label>Email</label>
+
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(event) =>
+                                        setEmail(event.target.value)
+                                    }
+                                    placeholder="you@example.com"
+                                    required
+                                />
+                            </div>
+
+                            <div className="admin-form-group full-width">
+                                <label>Password</label>
+
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(event) =>
+                                        setPassword(event.target.value)
+                                    }
+                                    placeholder="Minimum 6 characters"
+                                    minLength="6"
+                                    required
+                                />
+                            </div>
+
+                            <div className="admin-form-actions">
+                                <button
+                                    className="button button-primary"
+                                    type="submit"
+                                    disabled={loading}
+                                >
+                                    {loading
+                                        ? "Please wait..."
+                                        : isRegistering
+                                            ? "Create Account"
+                                            : "Login"}
+                                </button>
+                            </div>
+                        </form>
+
+                        {message && (
+                            <p className="admin-message">
+                                {message}
+                            </p>
+                        )}
+
+                        <p style={{ marginTop: "20px" }}>
+                            {isRegistering
+                                ? "Already have an account?"
+                                : "Don't have an account?"}
+
+                            {" "}
+
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setIsRegistering(!isRegistering);
+                                    setMessage("");
+                                }}
+                                style={{
+                                    border: "none",
+                                    background: "none",
+                                    padding: 0,
+                                    cursor: "pointer",
+                                    fontWeight: "700"
+                                }}
+                            >
+                                {isRegistering
+                                    ? "Login"
+                                    : "Create one"}
+                            </button>
+                        </p>
+
+                    </div>
                 </div>
             </main>
 
@@ -51,6 +243,10 @@ function Login({ cartCount }) {
         </>
     );
 }
+
+// =========================
+// ADMIN
+// =========================
 
 function Admin({ cartCount }) {
     const [products, setProducts] = useState([]);
@@ -223,10 +419,7 @@ function Admin({ cartCount }) {
         }
     };
 
-    // -------------------------
-    // ANALYTICS
-    // -------------------------
-
+    // Analytics
     const totalStock = products.reduce(
         (total, product) =>
             total + Number(product.stock),
@@ -269,7 +462,6 @@ function Admin({ cartCount }) {
             ? Math.round(totalStock / products.length)
             : 0;
 
-    // Calculate stock grouped by category
     const categoryStock = products.reduce(
         (result, product) => {
             const category = product.category;
@@ -328,9 +520,7 @@ function Admin({ cartCount }) {
                         >
 
                             <div className="admin-form-group">
-                                <label>
-                                    Product Name
-                                </label>
+                                <label>Product Name</label>
 
                                 <input
                                     type="text"
@@ -343,9 +533,7 @@ function Admin({ cartCount }) {
                             </div>
 
                             <div className="admin-form-group">
-                                <label>
-                                    Price (₹)
-                                </label>
+                                <label>Price (₹)</label>
 
                                 <input
                                     type="number"
@@ -359,9 +547,7 @@ function Admin({ cartCount }) {
                             </div>
 
                             <div className="admin-form-group">
-                                <label>
-                                    Image Path
-                                </label>
+                                <label>Image Path</label>
 
                                 <input
                                     type="text"
@@ -374,9 +560,7 @@ function Admin({ cartCount }) {
                             </div>
 
                             <div className="admin-form-group">
-                                <label>
-                                    Category
-                                </label>
+                                <label>Category</label>
 
                                 <input
                                     type="text"
@@ -389,9 +573,7 @@ function Admin({ cartCount }) {
                             </div>
 
                             <div className="admin-form-group full-width">
-                                <label>
-                                    Short Description
-                                </label>
+                                <label>Short Description</label>
 
                                 <textarea
                                     name="description"
@@ -403,9 +585,7 @@ function Admin({ cartCount }) {
                             </div>
 
                             <div className="admin-form-group">
-                                <label>
-                                    Badge
-                                </label>
+                                <label>Badge</label>
 
                                 <input
                                     type="text"
@@ -417,9 +597,7 @@ function Admin({ cartCount }) {
                             </div>
 
                             <div className="admin-form-group">
-                                <label>
-                                    Stock
-                                </label>
+                                <label>Stock</label>
 
                                 <input
                                     type="number"
@@ -433,9 +611,7 @@ function Admin({ cartCount }) {
                             </div>
 
                             <div className="admin-form-group full-width">
-                                <label>
-                                    Product Details
-                                </label>
+                                <label>Product Details</label>
 
                                 <textarea
                                     name="details"
@@ -617,7 +793,7 @@ function Admin({ cartCount }) {
                                                     style={{
                                                         height: `${barHeight}%`
                                                     }}
-                                                ></div>
+                                                />
 
                                             </div>
 
@@ -717,6 +893,10 @@ function Admin({ cartCount }) {
     );
 }
 
+// =========================
+// 404
+// =========================
+
 function NotFound({ cartCount }) {
     return (
         <>
@@ -740,6 +920,10 @@ function NotFound({ cartCount }) {
         </>
     );
 }
+
+// =========================
+// APP
+// =========================
 
 function App() {
     const [cartItems, setCartItems] = useState([]);
