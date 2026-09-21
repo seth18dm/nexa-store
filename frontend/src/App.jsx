@@ -13,6 +13,10 @@ import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 
+const API_URL =
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:5000/api/products";
+
 function Home({ cartCount, onAddToCart }) {
     return (
         <>
@@ -67,9 +71,7 @@ function Admin({ cartCount }) {
 
     const fetchProducts = async () => {
         try {
-            const response = await fetch(
-                "http://localhost:5000/api/products"
-            );
+            const response = await fetch(API_URL);
 
             if (!response.ok) {
                 throw new Error("Failed to fetch products");
@@ -132,8 +134,8 @@ function Admin({ cartCount }) {
 
         try {
             const url = editingId
-                ? `http://localhost:5000/api/products/${editingId}`
-                : "http://localhost:5000/api/products";
+                ? `${API_URL}/${editingId}`
+                : API_URL;
 
             const method = editingId ? "PUT" : "POST";
 
@@ -198,7 +200,7 @@ function Admin({ cartCount }) {
 
         try {
             const response = await fetch(
-                `http://localhost:5000/api/products/${productId}`,
+                `${API_URL}/${productId}`,
                 {
                     method: "DELETE"
                 }
@@ -220,10 +222,6 @@ function Admin({ cartCount }) {
             setMessage(error.message);
         }
     };
-
-    /* ================================
-       ANALYTICS CALCULATIONS
-    ================================= */
 
     const totalStock = products.reduce(
         (total, product) =>
@@ -273,8 +271,6 @@ function Admin({ cartCount }) {
             <main className="section admin-page">
                 <div className="container">
 
-                    {/* ADMIN HEADER */}
-
                     <div className="admin-header">
                         <p className="eyebrow">
                             ADMIN PANEL
@@ -289,8 +285,6 @@ function Admin({ cartCount }) {
                             inventory and product information.
                         </p>
                     </div>
-
-                    {/* PRODUCT FORM */}
 
                     <div className="admin-form-card">
 
@@ -455,8 +449,6 @@ function Admin({ cartCount }) {
                         )}
                     </div>
 
-                    {/* ANALYTICS */}
-
                     <div className="admin-products-header">
                         <p className="eyebrow">
                             ANALYTICS
@@ -469,8 +461,6 @@ function Admin({ cartCount }) {
 
                     <div className="admin-stats-grid">
 
-                        {/* 1 */}
-
                         <div className="admin-stat-card">
                             <span className="admin-stat-label">
                                 Total Products
@@ -480,8 +470,6 @@ function Admin({ cartCount }) {
                                 {products.length}
                             </strong>
                         </div>
-
-                        {/* 2 */}
 
                         <div className="admin-stat-card">
                             <span className="admin-stat-label">
@@ -493,8 +481,6 @@ function Admin({ cartCount }) {
                             </strong>
                         </div>
 
-                        {/* 3 */}
-
                         <div className="admin-stat-card">
                             <span className="admin-stat-label">
                                 Average Price
@@ -504,8 +490,6 @@ function Admin({ cartCount }) {
                                 ₹{averagePrice.toLocaleString("en-IN")}
                             </strong>
                         </div>
-
-                        {/* 4 */}
 
                         <div className="admin-stat-card">
                             <span className="admin-stat-label">
@@ -517,8 +501,6 @@ function Admin({ cartCount }) {
                             </strong>
                         </div>
 
-                        {/* 5 */}
-
                         <div className="admin-stat-card">
                             <span className="admin-stat-label">
                                 Inventory Value
@@ -528,8 +510,6 @@ function Admin({ cartCount }) {
                                 ₹{inventoryValue.toLocaleString("en-IN")}
                             </strong>
                         </div>
-
-                        {/* 6 */}
 
                         <div className="admin-stat-card">
                             <span className="admin-stat-label">
@@ -541,8 +521,6 @@ function Admin({ cartCount }) {
                             </strong>
                         </div>
 
-                        {/* 7 */}
-
                         <div className="admin-stat-card">
                             <span className="admin-stat-label">
                                 Out-of-Stock Products
@@ -552,8 +530,6 @@ function Admin({ cartCount }) {
                                 {outOfStockProducts}
                             </strong>
                         </div>
-
-                        {/* 8 */}
 
                         <div className="admin-stat-card">
                             <span className="admin-stat-label">
@@ -566,8 +542,6 @@ function Admin({ cartCount }) {
                         </div>
 
                     </div>
-
-                    {/* PRODUCTS */}
 
                     <div className="admin-products-header">
                         <p className="eyebrow">

@@ -4,6 +4,10 @@ import ProductCard from "../components/ProductCard";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
+const API_URL =
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:5000/api/products";
+
 function Products({
     cartCount,
     onAddToCart
@@ -15,9 +19,7 @@ function Products({
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await fetch(
-                    "http://localhost:5000/api/products"
-                );
+                const response = await fetch(API_URL);
 
                 if (!response.ok) {
                     throw new Error("Failed to fetch products");
@@ -42,7 +44,6 @@ function Products({
             <Navbar cartCount={cartCount} />
 
             <main className="section products-page">
-
                 <div className="container">
 
                     <div className="section-heading">
@@ -85,7 +86,6 @@ function Products({
                     )}
 
                 </div>
-
             </main>
 
             <Footer />

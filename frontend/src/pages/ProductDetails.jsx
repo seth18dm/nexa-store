@@ -11,6 +11,10 @@ import charge65 from "../assets/Products/charge-65.png";
 import soundpodMini from "../assets/Products/soundpod-mini.png";
 import deskhub7 from "../assets/Products/deskhub-7.png";
 
+const API_URL =
+    import.meta.env.VITE_API_URL ||
+    "http://localhost:5000/api/products";
+
 const productImages = {
     "AirSound Pro": airsoundPro,
     "MechaKey 75": mechakey75,
@@ -33,9 +37,7 @@ function ProductDetails({
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(
-                    `http://localhost:5000/api/products`
-                );
+                const response = await fetch(API_URL);
 
                 if (!response.ok) {
                     throw new Error("Failed to fetch products");
@@ -93,7 +95,8 @@ function ProductDetails({
                         </h1>
 
                         <p>
-                            {error || "The product you are looking for does not exist."}
+                            {error ||
+                                "The product you are looking for does not exist."}
                         </p>
 
                         <Link
@@ -123,7 +126,6 @@ function ProductDetails({
 
                     <div className="product-details">
 
-                        {/* Product Image */}
                         <div className="product-details-image">
 
                             <img
@@ -133,7 +135,6 @@ function ProductDetails({
 
                         </div>
 
-                        {/* Product Information */}
                         <div className="product-details-content">
 
                             <p className="eyebrow">
