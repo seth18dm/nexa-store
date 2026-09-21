@@ -223,6 +223,10 @@ function Admin({ cartCount }) {
         }
     };
 
+    // -------------------------
+    // ANALYTICS
+    // -------------------------
+
     const totalStock = products.reduce(
         (total, product) =>
             total + Number(product.stock),
@@ -247,7 +251,8 @@ function Admin({ cartCount }) {
     const inventoryValue = products.reduce(
         (total, product) =>
             total +
-            Number(product.price) * Number(product.stock),
+            Number(product.price) *
+            Number(product.stock),
         0
     );
 
@@ -263,6 +268,27 @@ function Admin({ cartCount }) {
         products.length > 0
             ? Math.round(totalStock / products.length)
             : 0;
+
+    // Calculate stock grouped by category
+    const categoryStock = products.reduce(
+        (result, product) => {
+            const category = product.category;
+
+            if (!result[category]) {
+                result[category] = 0;
+            }
+
+            result[category] += Number(product.stock);
+
+            return result;
+        },
+        {}
+    );
+
+    const maxCategoryStock = Math.max(
+        ...Object.values(categoryStock),
+        1
+    );
 
     return (
         <>
@@ -285,6 +311,8 @@ function Admin({ cartCount }) {
                             inventory and product information.
                         </p>
                     </div>
+
+                    {/* ADD / EDIT PRODUCT */}
 
                     <div className="admin-form-card">
 
@@ -447,7 +475,10 @@ function Admin({ cartCount }) {
                                 {message}
                             </p>
                         )}
+
                     </div>
+
+                    {/* ANALYTICS */}
 
                     <div className="admin-products-header">
                         <p className="eyebrow">
@@ -542,6 +573,68 @@ function Admin({ cartCount }) {
                         </div>
 
                     </div>
+
+                    {/* STOCK GRAPH */}
+
+                    <div className="admin-chart-card">
+
+                        <div className="admin-products-header">
+                            <p className="eyebrow">
+                                INVENTORY ANALYTICS
+                            </p>
+
+                            <h2>
+                                Stock by Category
+                            </h2>
+
+                            <p>
+                                Current inventory distribution across product categories.
+                            </p>
+                        </div>
+
+                        <div className="admin-chart">
+
+                            {Object.entries(categoryStock).map(
+                                ([category, stock]) => {
+
+                                    const barHeight =
+                                        (stock / maxCategoryStock) * 100;
+
+                                    return (
+                                        <div
+                                            className="admin-chart-column"
+                                            key={category}
+                                        >
+
+                                            <div className="admin-chart-value">
+                                                {stock}
+                                            </div>
+
+                                            <div className="admin-chart-bar-wrapper">
+
+                                                <div
+                                                    className="admin-chart-bar"
+                                                    style={{
+                                                        height: `${barHeight}%`
+                                                    }}
+                                                ></div>
+
+                                            </div>
+
+                                            <div className="admin-chart-label">
+                                                {category}
+                                            </div>
+
+                                        </div>
+                                    );
+                                }
+                            )}
+
+                        </div>
+
+                    </div>
+
+                    {/* PRODUCTS */}
 
                     <div className="admin-products-header">
                         <p className="eyebrow">

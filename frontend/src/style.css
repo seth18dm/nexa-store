@@ -2139,3 +2139,94 @@ a {
         grid-template-columns: 1fr;
     }
 }
+
+/* Admin Analytics Chart */
+
+.admin-chart-card {
+    margin-top: 32px;
+    padding: 32px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 20px;
+}
+
+.admin-chart-card .admin-products-header {
+    margin-bottom: 24px;
+}
+
+.admin-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    gap: 24px;
+    min-height: 320px;
+    padding: 24px 16px 0;
+    border-bottom: 1px solid #dbe1ea;
+}
+
+.admin-chart-column {
+    flex: 1;
+    max-width: 140px;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.admin-chart-value {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.admin-chart-bar-wrapper {
+    width: 64px;
+    height: 220px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.admin-chart-bar {
+    width: 100%;
+    min-height: 8px;
+    border-radius: 10px 10px 0 0;
+    background: #2563eb;
+    transition: height 0.3s ease;
+}
+
+.admin-chart-label {
+    margin-top: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    text-align: center;
+}
+
+@media (max-width: 700px) {
+
+    .admin-chart-card {
+        padding: 20px;
+    }
+
+    .admin-chart {
+        gap: 10px;
+        padding-left: 4px;
+        padding-right: 4px;
+    }
+
+    .admin-chart-column {
+        max-width: 90px;
+    }
+
+    .admin-chart-bar-wrapper {
+        width: 40px;
+    }
+
+    .admin-chart-label {
+        font-size: 11px;
+        word-break: break-word;
+    }
+}
